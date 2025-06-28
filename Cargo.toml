@@ -1,5 +1,6 @@
 [package]
 name = "copycat"
+description = "基于 Kovi 框架的群消息自动复读插件"
 version = "0.1.0"
 edition = "2024"
 
