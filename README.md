@@ -34,4 +34,4 @@ allow_groups = [123456789]
 
 ```  
 
-配置文件应放置于编译后与可执行文件同级的 `data/copycat/config.toml` 中。
+配置文件应放置于编译后与可执行文件同级的 `data/kovi-plugin-copycat/config.toml` 中。
