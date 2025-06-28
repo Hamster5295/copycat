@@ -27,13 +27,21 @@ async fn init() {
 
     STATE.get_or_init(|| Arc::new(Mutex::new(HashMap::new())));
 
-    bot.set_plugin_access_control("copycat", true).unwrap();
-    bot.set_plugin_access_control_list(
-        "copycat",
-        true,
-        SetAccessControlList::Adds(config.allow_groups.clone()),
-    )
-    .unwrap();
+    match &config.allow_groups {
+        Some(groups) => {
+            bot.set_plugin_access_control("copycat", true).unwrap();
+            bot.set_plugin_access_control_list(
+                "copycat",
+                true,
+                SetAccessControlList::Adds(groups.clone()),
+            )
+            .unwrap();
+        }
+        None => {
+            bot.set_plugin_access_control("copycat", false).unwrap();
+        }
+    }
+
     plugin::on_group_msg(on_group_msg);
 }
 
