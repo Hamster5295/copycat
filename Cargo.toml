@@ -1,6 +1,6 @@
 [package]
 name = "kovi-plugin-copycat"
-version = "0.1.1"
+version = "0.1.2"
 description = "基于 Kovi 框架的群消息自动复读插件"
 authors = ["Hamster5295 <hamster5295@163.com>"]
 edition = "2024"
@@ -9,6 +9,11 @@ license = "MIT"
 repository = "https://github.com/Hamster5295/copycat"
 documentation = "https://docs.rs/kovi-plugin-copycat/latest/kovi_plugin_copycat"
 readme = "README.md"
+
+
+[lib]
+name = "kovi_plugin_copycat"
+path = "src/lib.rs"
 
 
 [dependencies]
