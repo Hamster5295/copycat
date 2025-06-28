@@ -6,13 +6,10 @@ use kovi::{
 };
 use std::{
     collections::HashMap,
-    sync::{Arc, OnceLock},
+    sync::Arc,
 };
 
 use crate::config::CONFIG;
-
-static BOT: OnceLock<Arc<RuntimeBot>> = OnceLock::new();
-static STATE: OnceLock<Arc<Mutex<HashMap<i64, State>>>> = OnceLock::new();
 
 struct State {
     text: String,
@@ -22,10 +19,10 @@ struct State {
 
 #[kovi::plugin]
 async fn init() {
-    let bot = BOT.get_or_init(|| plugin::get_runtime_bot());
-    let config = config::init(bot).await.unwrap();
+    let bot = plugin::get_runtime_bot();
+    let config = config::init(&bot).await.unwrap();
 
-    STATE.get_or_init(|| Arc::new(Mutex::new(HashMap::new())));
+    let state: Arc<Mutex<HashMap<i64, State>>> = Arc::new(Mutex::new(HashMap::new()));
 
     match &config.allow_groups {
         Some(groups) => {
@@ -42,11 +39,18 @@ async fn init() {
         }
     }
 
-    plugin::on_group_msg(on_group_msg);
+    plugin::on_group_msg({
+        let bot = bot.clone();
+        let state = state.clone();
+        move |e| on_group_msg(e, bot.clone(), state.clone())
+    });
 }
 
-async fn on_group_msg(event: Arc<GroupMsgEvent>) {
-    let state = STATE.get().unwrap().clone();
+async fn on_group_msg(
+    event: Arc<GroupMsgEvent>,
+    bot: Arc<RuntimeBot>,
+    state: Arc<Mutex<HashMap<i64, State>>>,
+) {
     let config = CONFIG.get().unwrap();
 
     let msgs = event.message.get("text");
@@ -92,7 +96,7 @@ async fn on_group_msg(event: Arc<GroupMsgEvent>) {
         }
 
         if s.count == config.repeat_after {
-            BOT.get().unwrap().send_group_msg(event.group_id, &s.text);
+            bot.send_group_msg(event.group_id, &s.text);
             s.count += 1;
 
             info!(
