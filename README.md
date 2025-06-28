@@ -12,7 +12,7 @@ cargo add kovi-plugin-copycat
 
 3. 在 `build_bot!` 宏中传入插件
 ```rust
-let bot = build_bot!(copycat /* 和其他你正在使用的插件，用 , 分割 */ );
+let bot = build_bot!(kovi-plugin-copycat /* 和其他你正在使用的插件，用 , 分割 */ );
 ```
 
 ## 配置
