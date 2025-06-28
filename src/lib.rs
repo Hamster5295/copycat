@@ -4,10 +4,7 @@ use kovi::{
     PluginBuilder as plugin, RuntimeBot, bot::runtimebot::kovi_api::SetAccessControlList,
     event::GroupMsgEvent, log::info, tokio::sync::Mutex,
 };
-use std::{
-    collections::HashMap,
-    sync::Arc,
-};
+use std::{collections::HashMap, sync::Arc};
 
 use crate::config::CONFIG;
 
@@ -24,19 +21,16 @@ async fn init() {
 
     let state: Arc<Mutex<HashMap<i64, State>>> = Arc::new(Mutex::new(HashMap::new()));
 
-    match &config.allow_groups {
-        Some(groups) => {
-            bot.set_plugin_access_control("copycat", true).unwrap();
-            bot.set_plugin_access_control_list(
-                "copycat",
-                true,
-                SetAccessControlList::Adds(groups.clone()),
-            )
-            .unwrap();
-        }
-        None => {
-            bot.set_plugin_access_control("copycat", false).unwrap();
-        }
+    if let Some(groups) = &config.allow_groups {
+        bot.set_plugin_access_control("copycat", true).unwrap();
+        bot.set_plugin_access_control_list(
+            "copycat",
+            true,
+            SetAccessControlList::Adds(groups.clone()),
+        )
+        .unwrap();
+    } else {
+        bot.set_plugin_access_control("copycat", false).unwrap();
     }
 
     plugin::on_group_msg({
