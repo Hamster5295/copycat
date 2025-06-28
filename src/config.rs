@@ -27,7 +27,7 @@ pub(crate) async fn init(bot: &Arc<RuntimeBot>) -> Result<&Config> {
     let config_txt = match fs::read_to_string(&config_path).await {
         Ok(txt) => txt,
         Err(e) => {
-            warn!("[copycat] Failed to read config file: {}", e);
+            warn!("[copycat] Failed to read config file: {e}");
             info!("[copycat] Using default config");
             String::new()
         }
