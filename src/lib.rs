@@ -8,6 +8,8 @@ use std::{collections::HashMap, sync::Arc};
 
 use crate::config::CONFIG;
 
+const PLUGIN_NAME: &str = "kovi-plugin-copycat";
+
 struct State {
     text: String,
     count: u32,
@@ -22,15 +24,15 @@ async fn init() {
     let state: Arc<Mutex<HashMap<i64, State>>> = Arc::new(Mutex::new(HashMap::new()));
 
     if let Some(groups) = &config.allow_groups {
-        bot.set_plugin_access_control("copycat", true).unwrap();
+        bot.set_plugin_access_control(PLUGIN_NAME, true).unwrap();
         bot.set_plugin_access_control_list(
-            "copycat",
+            PLUGIN_NAME,
             true,
             SetAccessControlList::Adds(groups.clone()),
         )
         .unwrap();
     } else {
-        bot.set_plugin_access_control("copycat", false).unwrap();
+        bot.set_plugin_access_control(PLUGIN_NAME, false).unwrap();
     }
 
     plugin::on_group_msg({
@@ -38,6 +40,8 @@ async fn init() {
         let state = state.clone();
         move |e| on_group_msg(e, bot.clone(), state.clone())
     });
+
+    info!("[copycat] Ready to reveal the essence of human beings.")
 }
 
 async fn on_group_msg(
