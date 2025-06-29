@@ -1,6 +1,6 @@
 [package]
 name = "kovi-plugin-copycat"
-version = "0.1.3"
+version = "0.1.4"
 description = "基于 Kovi 框架的群消息自动复读插件"
 authors = ["Hamster5295 <hamster5295@163.com>"]
 edition = "2024"
@@ -17,7 +17,7 @@ path = "src/lib.rs"
 
 
 [dependencies]
-anyhow = "1.0.98"
-kovi = "0.12.3"
-serde = { version = "1.0.219", features = ["derive"] }
-toml = "0.8.23"
+anyhow = ">=1.0.98"
+kovi = ">=0.12.3"
+serde = { version = ">=1.0.219", features = ["derive"] }
+toml = ">=0.8.23"
